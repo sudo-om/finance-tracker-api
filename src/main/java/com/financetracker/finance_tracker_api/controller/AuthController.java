@@ -1,5 +1,6 @@
 package com.financetracker.finance_tracker_api.controller;
 
+import com.financetracker.finance_tracker_api.dto.request.LoginRequest;
 import com.financetracker.finance_tracker_api.dto.request.RegisterRequest;
 import com.financetracker.finance_tracker_api.dto.response.AuthResponse;
 import com.financetracker.finance_tracker_api.service.AuthService;
@@ -18,8 +19,11 @@ public class AuthController {
 
     @PostMapping("/register")
     public AuthResponse register(@Valid @RequestBody RegisterRequest request){
-
         return authService.register(request);
+    }
 
+    @PostMapping("/login")
+    public AuthResponse login(@Valid @RequestBody LoginRequest request) {
+        return authService.login(request);
     }
 }

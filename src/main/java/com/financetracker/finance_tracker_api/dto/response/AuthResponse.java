@@ -6,7 +6,12 @@ import lombok.Data;
 @Data
 @Builder
 public class AuthResponse {
-    private String token;
+    private String accessToken;
+
+    @Builder.Default
+    private String tokenType = "Bearer";
+
+    private Long expiresIn;
 
     private UserResponse user;
 

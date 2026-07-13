@@ -2,6 +2,7 @@ package com.financetracker.finance_tracker_api.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,6 +22,21 @@ public class GlobalExceptionHandler {
                         "error","Conflict",
                         "message",ex.getMessage()
                 ));
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<?> handleBadCredentials(
+            BadCredentialsException ex
+    ) {
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of(
+                        "timestamp", LocalDateTime.now(),
+                        "status", 401,
+                        "error", "Unauthorized",
+                        "message", "Invalid email or password"
+                ));
+
     }
 
 }
