@@ -1,6 +1,7 @@
 package com.financetracker.finance_tracker_api.service;
 
 import com.financetracker.finance_tracker_api.dto.request.ExpenseCreateRequest;
+import com.financetracker.finance_tracker_api.dto.request.ExpenseFilterRequest;
 import com.financetracker.finance_tracker_api.dto.request.ExpenseUpdateRequest;
 import com.financetracker.finance_tracker_api.dto.response.ExpenseResponse;
 import com.financetracker.finance_tracker_api.dto.response.PagedResponse;
@@ -15,7 +16,10 @@ public interface ExpenseService {
             ExpenseCreateRequest request
     );
 
-    @Nullable PagedResponse<ExpenseResponse> getAllExpenses(Pageable pageable);
+    PagedResponse<ExpenseResponse> getAllExpenses(
+            ExpenseFilterRequest request,
+            Pageable pageable
+    );
 
     ExpenseResponse getExpenseById(UUID id);
 

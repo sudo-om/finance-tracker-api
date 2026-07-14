@@ -1,6 +1,7 @@
 package com.financetracker.finance_tracker_api.controller;
 
 import com.financetracker.finance_tracker_api.dto.request.ExpenseCreateRequest;
+import com.financetracker.finance_tracker_api.dto.request.ExpenseFilterRequest;
 import com.financetracker.finance_tracker_api.dto.request.ExpenseUpdateRequest;
 import com.financetracker.finance_tracker_api.dto.response.ApiResponse;
 import com.financetracker.finance_tracker_api.dto.response.ExpenseResponse;
@@ -8,7 +9,6 @@ import com.financetracker.finance_tracker_api.dto.response.PagedResponse;
 import com.financetracker.finance_tracker_api.service.ExpenseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,11 +36,13 @@ public class ExpenseController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<PagedResponse<ExpenseResponse>>> getAllExpenses(
+
+            ExpenseFilterRequest request,
             Pageable pageable
     ) {
 
         PagedResponse<ExpenseResponse> response =
-                expenseService.getAllExpenses(pageable);
+                expenseService.getAllExpenses(request, pageable);
 
         ApiResponse<PagedResponse<ExpenseResponse>> apiResponse =
                 ApiResponse.<PagedResponse<ExpenseResponse>>builder()
@@ -73,6 +75,8 @@ public class ExpenseController {
         return ResponseEntity.ok(apiResponse);
 
     }
+
+
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<ExpenseResponse>> updateExpense(
 

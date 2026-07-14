@@ -1,6 +1,7 @@
 package com.financetracker.finance_tracker_api.service.impl;
 
 import com.financetracker.finance_tracker_api.dto.request.ExpenseCreateRequest;
+import com.financetracker.finance_tracker_api.dto.request.ExpenseFilterRequest;
 import com.financetracker.finance_tracker_api.dto.request.ExpenseUpdateRequest;
 import com.financetracker.finance_tracker_api.dto.response.ExpenseResponse;
 import com.financetracker.finance_tracker_api.dto.response.PagedResponse;
@@ -14,10 +15,13 @@ import com.financetracker.finance_tracker_api.repository.CategoryRepository;
 import com.financetracker.finance_tracker_api.repository.ExpenseRepository;
 import com.financetracker.finance_tracker_api.service.CurrentUserService;
 import com.financetracker.finance_tracker_api.service.ExpenseService;
+import com.financetracker.finance_tracker_api.specification.ExpenseSpecification;
+import com.financetracker.finance_tracker_api.specification.ExpenseSpecificationBuilder;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
@@ -37,6 +41,8 @@ public class ExpenseServiceImpl implements ExpenseService {
     private final CurrentUserService currentUserService;
 
     private final ExpenseMapper expenseMapper;
+
+    private final ExpenseSpecificationBuilder expenseSpecificationBuilder;
 
 
     @Override
@@ -72,12 +78,21 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     @Transactional
-    public PagedResponse<ExpenseResponse> getAllExpenses(Pageable pageable) {
+    public PagedResponse<ExpenseResponse> getAllExpenses(ExpenseFilterRequest request, Pageable pageable) {
 
         User currentUser = currentUserService.getCurrentUser();
 
+        Specification<Expense> specification =
+                expenseSpecificationBuilder.build(
+                        request,
+                        currentUser
+                );
+
         Page<Expense> expensePage =
-                expenseRepository.findAllByUser(currentUser, pageable);
+                expenseRepository.findAll(
+                        specification,
+                        pageable
+                );
 
         List<ExpenseResponse> expenses =
                 expensePage.getContent()
@@ -161,4 +176,5 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         expenseRepository.delete(expense);
     }
+
 }
