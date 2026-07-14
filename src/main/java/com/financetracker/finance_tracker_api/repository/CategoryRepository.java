@@ -1,17 +1,20 @@
 package com.financetracker.finance_tracker_api.repository;
 
 import com.financetracker.finance_tracker_api.entity.Category;
+import com.financetracker.finance_tracker_api.entity.User;
 import com.financetracker.finance_tracker_api.entity.enums.CategoryType;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.lang.ScopedValue;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-public interface CategoryRepository extends JpaRepository<Category, UUID> {
+@Repository
+public interface CategoryRepository
+        extends JpaRepository<Category, UUID> {
 
     List<Category> findByType(CategoryType type);
 
-    <T> ScopedValue<T> findById(@NotNull(message = "Category is required") Long categoryId);
+
 }

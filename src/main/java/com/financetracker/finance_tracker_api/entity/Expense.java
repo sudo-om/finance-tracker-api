@@ -2,6 +2,7 @@ package com.financetracker.finance_tracker_api.entity;
 
 import com.financetracker.finance_tracker_api.entity.enums.PaymentMethod;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -15,10 +16,14 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "expenses")
 public class Expense extends BaseEntity {
+
+    @Column(nullable = false, length = 100)
+    private String title;
+
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal amount;
 
-    @Column(length = 100)
+    @NotBlank(message = "Merchant is required")
     private String merchant;
 
     @Column(length = 500)

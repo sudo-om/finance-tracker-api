@@ -7,12 +7,13 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @Builder
 public class ExpenseResponse {
 
-    private Long id;
+    private UUID id;
 
     private String title;
 

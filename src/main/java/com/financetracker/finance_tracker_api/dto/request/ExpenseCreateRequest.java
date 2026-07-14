@@ -8,6 +8,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 public class ExpenseCreateRequest {
@@ -22,7 +23,7 @@ public class ExpenseCreateRequest {
     private BigDecimal amount;
 
     @NotNull(message = "Category is required")
-    private Long categoryId;
+    private UUID categoryId;
 
     @NotNull(message = "Payment method is required")
     private PaymentMethod paymentMethod;
@@ -30,4 +31,6 @@ public class ExpenseCreateRequest {
     @NotNull(message = "Expense date is required")
     private LocalDate expenseDate;
 
+     @NotBlank(message = "Merchant is required")
+     private String merchant;
 }

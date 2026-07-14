@@ -28,6 +28,6 @@ public class CurrentUserServiceImpl
 
         return userRepository.findByEmail(email)
                 .orElseThrow(() ->
-         new ResourceNotFoundException("User not found with email: " + email);
+         new ResourceNotFoundException("User not found with email: " + email));
     }
 }
