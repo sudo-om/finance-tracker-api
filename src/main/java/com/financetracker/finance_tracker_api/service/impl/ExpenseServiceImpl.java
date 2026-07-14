@@ -15,16 +15,15 @@ import com.financetracker.finance_tracker_api.repository.CategoryRepository;
 import com.financetracker.finance_tracker_api.repository.ExpenseRepository;
 import com.financetracker.finance_tracker_api.service.CurrentUserService;
 import com.financetracker.finance_tracker_api.service.ExpenseService;
-import com.financetracker.finance_tracker_api.specification.ExpenseSpecification;
 import com.financetracker.finance_tracker_api.specification.ExpenseSpecificationBuilder;
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -77,7 +76,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public PagedResponse<ExpenseResponse> getAllExpenses(ExpenseFilterRequest request, Pageable pageable) {
 
         User currentUser = currentUserService.getCurrentUser();
@@ -116,7 +115,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public ExpenseResponse getExpenseById(UUID id) {
         User currentUser =
                 currentUserService.getCurrentUser();
