@@ -18,6 +18,7 @@ public class DashboardController {
 
     private final DashboardService dashboardService;
 
+
     @GetMapping("/summary")
     public ResponseEntity<ApiResponse<DashboardSummaryResponse>> getSummary() {
 
@@ -88,5 +89,22 @@ public class DashboardController {
                         .build();
 
         return ResponseEntity.ok(apiResponse);
+    }
+
+    @GetMapping("/balance")
+    public ResponseEntity<ApiResponse<BalanceResponse>> getBalance() {
+
+        BalanceResponse response = dashboardService.getBalance();
+
+        ApiResponse<BalanceResponse> apiResponse =
+                ApiResponse.<BalanceResponse>builder()
+                        .success(true)
+                        .message("Balance fetched successfully")
+                        .data(response)
+                        .timestamp(LocalDateTime.now())
+                        .build();
+
+        return ResponseEntity.ok(apiResponse);
+
     }
 }
