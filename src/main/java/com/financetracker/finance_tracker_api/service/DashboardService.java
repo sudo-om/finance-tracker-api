@@ -15,4 +15,6 @@ public interface DashboardService {
     List<ExpenseResponse> getRecentTransactions();
 
     BalanceResponse getBalance();
+
+
 }

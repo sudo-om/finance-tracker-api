@@ -1,5 +1,6 @@
 package com.financetracker.finance_tracker_api.repository;
 
+import com.financetracker.finance_tracker_api.entity.Category;
 import com.financetracker.finance_tracker_api.entity.Expense;
 import com.financetracker.finance_tracker_api.entity.User;
 import com.financetracker.finance_tracker_api.projection.CategorySpendingProjection;
@@ -76,4 +77,22 @@ public interface ExpenseRepository extends JpaRepository<Expense, UUID>, JpaSpec
     WHERE e.user = :user
     """)
     BigDecimal getTotalExpense(@Param("user") User user);
+
+
+    @Query("""
+    SELECT COALESCE(SUM(e.amount), 0)
+    FROM Expense e
+    WHERE e.user = :user
+      AND e.category = :category
+      AND e.expenseDate BETWEEN :startDate AND :endDate
+    """)
+    BigDecimal getTotalSpentForBudget(
+            @Param("user") User user,
+            @Param("category") Category category,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate
+    );
+
+
+
 }
