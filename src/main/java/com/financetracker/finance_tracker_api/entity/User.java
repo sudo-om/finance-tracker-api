@@ -31,6 +31,7 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
+    @Column(unique = true)
     private Long telegramChatId;
 
     @Builder.Default

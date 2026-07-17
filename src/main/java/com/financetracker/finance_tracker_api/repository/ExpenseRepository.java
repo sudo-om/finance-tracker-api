@@ -93,6 +93,44 @@ public interface ExpenseRepository extends JpaRepository<Expense, UUID>, JpaSpec
             @Param("endDate") LocalDate endDate
     );
 
+    @Query("""
+    SELECT COALESCE(SUM(e.amount),0)
+    FROM Expense e
+    WHERE e.user=:user
+    AND e.expenseDate BETWEEN :startDate AND :endDate
+    """)
+    BigDecimal getTotalExpense(
+            User user,
+            LocalDate startDate,
+            LocalDate endDate
+    );
+
+    @Query("""
+    SELECT COALESCE(MAX(e.amount),0)
+    FROM Expense e
+    WHERE e.user=:user
+    AND e.expenseDate BETWEEN :startDate AND :endDate
+    """)
+    BigDecimal getLargestExpense(
+            User user,
+            LocalDate startDate,
+            LocalDate endDate
+    );
+
+    @Query("""
+    SELECT e.category.name
+    FROM Expense e
+    WHERE e.user=:user
+    AND e.expenseDate BETWEEN :startDate AND :endDate
+    GROUP BY e.category.name
+    ORDER BY SUM(e.amount) DESC
+    """)
+    List<String> findTopExpenseCategories(
+            User user,
+            LocalDate startDate,
+            LocalDate endDate,
+            Pageable pageable
+    );
 
 
 }

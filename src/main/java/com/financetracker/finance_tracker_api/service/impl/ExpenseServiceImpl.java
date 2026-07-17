@@ -17,6 +17,7 @@ import com.financetracker.finance_tracker_api.service.CurrentUserService;
 import com.financetracker.finance_tracker_api.service.ExpenseService;
 import com.financetracker.finance_tracker_api.specification.ExpenseSpecificationBuilder;
 
+import com.financetracker.finance_tracker_api.telegram.TelegramService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -43,15 +44,44 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     private final ExpenseSpecificationBuilder expenseSpecificationBuilder;
 
+    private final TelegramService telegramService;
+
+    private String buildExpenseMessage(Expense expense) {
+
+        return """
+            💸 Expense Added Successfully
+
+            💰 Amount : ₹%s
+            📂 Category : %s
+            🏪 Merchant : %s
+            📅 Date : %s
+
+            """.formatted(
+                expense.getAmount(),
+                expense.getCategory().getName(),
+                expense.getMerchant(),
+                expense.getExpenseDate()
+        );
+    }
+
 
     @Override
-    @Transactional
     public ExpenseResponse createExpense(
             ExpenseCreateRequest request
     ) {
 
         User currentUser =
                 currentUserService.getCurrentUser();
+
+        return createExpense(request, currentUser);
+
+    }
+
+    @Override
+    public ExpenseResponse createExpense(
+            ExpenseCreateRequest request,
+            User user
+    ) {
 
         Category category = categoryRepository
                 .findById(request.getCategoryId())
@@ -65,14 +95,15 @@ public class ExpenseServiceImpl implements ExpenseService {
                 .amount(request.getAmount())
                 .expenseDate(request.getExpenseDate())
                 .paymentMethod(request.getPaymentMethod())
-                .user(currentUser)
+                .user(user)
                 .category(category)
                 .build();
 
         Expense savedExpense = expenseRepository.saveAndFlush(expense);
 
-        return expenseMapper.toResponse(savedExpense);
+        telegramService.sendMessage(buildExpenseMessage(savedExpense));
 
+        return expenseMapper.toResponse(savedExpense);
     }
 
     @Override

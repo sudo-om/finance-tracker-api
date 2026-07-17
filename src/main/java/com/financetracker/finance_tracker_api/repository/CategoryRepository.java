@@ -1,7 +1,6 @@
 package com.financetracker.finance_tracker_api.repository;
 
 import com.financetracker.finance_tracker_api.entity.Category;
-import com.financetracker.finance_tracker_api.entity.User;
 import com.financetracker.finance_tracker_api.entity.enums.CategoryType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -16,5 +15,6 @@ public interface CategoryRepository
 
     List<Category> findByType(CategoryType type);
 
+    Optional<Category> findByNameIgnoreCase(String name);
 
 }

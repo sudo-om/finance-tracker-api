@@ -1,4 +1,7 @@
 package com.financetracker.finance_tracker_api.service;
 
-public class TelegramUserService {
+public interface TelegramUserService {
+
+    void linkTelegram(Long chatId);
+
 }
