@@ -12,6 +12,13 @@ body {
   color: #0F0F12;
   min-height: 100vh;
   line-height: 1.5;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Gen-Z Dark Mode Base Body */
+body.dark {
+  background-color: #121216 !important;
+  color: #F8FAFC !important;
 }
 
 /* Neo-Brutalism Design Utilities */
@@ -35,12 +42,22 @@ body {
   box-shadow: 6px 6px 0px 0px #000000;
 }
 
+/* Light Cards */
 .nb-card {
   background-color: #FFFFFF;
   border: 3px solid #000000;
   box-shadow: 5px 5px 0px 0px #000000;
   border-radius: 8px;
   padding: 1.25rem;
+  transition: all 0.15s ease;
+}
+
+/* Gen-Z Dark Mode Cards (Transforms White -> Cool Dark Grey #1E1E26 with Electric Neon Yellow Shadow) */
+.dark .nb-card, body.dark .nb-card {
+  background-color: #1E1E26 !important;
+  color: #F8FAFC !important;
+  border: 3px solid #000000 !important;
+  box-shadow: 5px 5px 0px 0px #FFE600 !important;
 }
 
 .nb-card-yellow {
@@ -49,6 +66,14 @@ body {
   box-shadow: 5px 5px 0px 0px #000000;
   border-radius: 8px;
   padding: 1.25rem;
+  color: #000000;
+}
+
+.dark .nb-card-yellow, body.dark .nb-card-yellow {
+  background-color: #FFE600 !important;
+  color: #000000 !important;
+  border: 3px solid #000000 !important;
+  box-shadow: 5px 5px 0px 0px #00E5FF !important;
 }
 
 .nb-card-cyan {
@@ -57,6 +82,14 @@ body {
   box-shadow: 5px 5px 0px 0px #000000;
   border-radius: 8px;
   padding: 1.25rem;
+  color: #000000;
+}
+
+.dark .nb-card-cyan, body.dark .nb-card-cyan {
+  background-color: #00E5FF !important;
+  color: #000000 !important;
+  border: 3px solid #000000 !important;
+  box-shadow: 5px 5px 0px 0px #FFE600 !important;
 }
 
 .nb-card-pink {
@@ -68,6 +101,14 @@ body {
   padding: 1.25rem;
 }
 
+.dark .nb-card-pink, body.dark .nb-card-pink {
+  background-color: #FF2A85 !important;
+  color: #FFFFFF !important;
+  border: 3px solid #000000 !important;
+  box-shadow: 5px 5px 0px 0px #00E5FF !important;
+}
+
+/* Buttons */
 .nb-btn {
   font-weight: 800;
   text-transform: uppercase;
@@ -86,9 +127,20 @@ body {
   color: #000000;
 }
 
+.dark .nb-btn, body.dark .nb-btn {
+  background-color: #2B2B38;
+  color: #FFFFFF;
+  border: 2px solid #000000;
+  box-shadow: 3px 3px 0px 0px #FFE600;
+}
+
 .nb-btn:hover {
   transform: translate(-1px, -1px);
   box-shadow: 4px 4px 0px 0px #000000;
+}
+
+.dark .nb-btn:hover, body.dark .nb-btn:hover {
+  box-shadow: 4px 4px 0px 0px #00E5FF;
 }
 
 .nb-btn:active {
@@ -101,14 +153,32 @@ body {
   color: #000000;
 }
 
+.dark .nb-btn-primary, body.dark .nb-btn-primary {
+  background-color: #FFE600 !important;
+  color: #000000 !important;
+  box-shadow: 3px 3px 0px 0px #000000 !important;
+}
+
 .nb-btn-success {
   background-color: #00E5FF;
   color: #000000;
 }
 
+.dark .nb-btn-success, body.dark .nb-btn-success {
+  background-color: #00E5FF !important;
+  color: #000000 !important;
+  box-shadow: 3px 3px 0px 0px #000000 !important;
+}
+
 .nb-btn-danger {
   background-color: #FF2A85;
   color: #FFFFFF;
+}
+
+.dark .nb-btn-danger, body.dark .nb-btn-danger {
+  background-color: #FF2A85 !important;
+  color: #FFFFFF !important;
+  box-shadow: 3px 3px 0px 0px #000000 !important;
 }
 
 .nb-btn-dark {
@@ -124,13 +194,25 @@ body {
   border: 2px solid #000000;
   border-radius: 6px;
   background-color: #FFFFFF;
+  color: #000000;
   outline: none;
   transition: all 0.1s ease;
+}
+
+.dark .nb-input, body.dark .nb-input {
+  background-color: #2A2A38 !important;
+  color: #F8FAFC !important;
+  border: 2px solid #000000 !important;
 }
 
 .nb-input:focus {
   background-color: #FFFDE6;
   box-shadow: 3px 3px 0px 0px #000000;
+}
+
+.dark .nb-input:focus, body.dark .nb-input:focus {
+  background-color: #1E1E26 !important;
+  box-shadow: 3px 3px 0px 0px #FFE600 !important;
 }
 
 .nb-badge {
@@ -152,6 +234,11 @@ body {
 .nb-badge-green { background-color: #10B981; color: #FFF; }
 .nb-badge-gray { background-color: #E5E7EB; color: #000; }
 
+.dark .nb-badge-gray, body.dark .nb-badge-gray {
+  background-color: #3F3F50 !important;
+  color: #F8FAFC !important;
+}
+
 .nb-progress-bg {
   width: 100%;
   height: 16px;
@@ -160,6 +247,10 @@ body {
   background-color: #FFFFFF;
   overflow: hidden;
   position: relative;
+}
+
+.dark .nb-progress-bg, body.dark .nb-progress-bg {
+  background-color: #2A2A38 !important;
 }
 
 .nb-progress-fill {
@@ -173,10 +264,42 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 100;
   padding: 1rem;
+}
+
+/* Dark Mode Overrides for Containers & Tables */
+body.dark nav {
+  background-color: #1E1E26 !important;
+  border-color: #000000 !important;
+}
+
+body.dark .bg-white {
+  background-color: #1E1E26 !important;
+  color: #F8FAFC !important;
+}
+
+body.dark .bg-\[\#F4F0EA\] {
+  background-color: #2A2A38 !important;
+}
+
+body.dark tr.bg-white {
+  background-color: #1E1E26 !important;
+  color: #F8FAFC !important;
+}
+
+body.dark tr.bg-white:hover {
+  background-color: #2A2A38 !important;
+}
+
+body.dark .text-black {
+  color: #F8FAFC !important;
+}
+
+body.dark .text-gray-800, body.dark .text-gray-700, body.dark .text-gray-600 {
+  color: #94A3B8 !important;
 }

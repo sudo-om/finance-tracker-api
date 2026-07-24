@@ -1,8 +1,8 @@
 import React from 'react';
-import { Wallet, LayoutDashboard, Receipt, PiggyBank, Send, LogOut } from 'lucide-react';
+import { Wallet, LayoutDashboard, Receipt, PiggyBank, Send, LogOut, Sun, Moon } from 'lucide-react';
 import { removeAuthToken, getUser } from '../api';
 
-export default function Navbar({ activeTab, setActiveTab, onLogout }) {
+export default function Navbar({ activeTab, setActiveTab, onLogout, darkMode, setDarkMode }) {
   const user = getUser();
 
   return (
@@ -10,12 +10,12 @@ export default function Navbar({ activeTab, setActiveTab, onLogout }) {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
         {/* Brand Logo */}
         <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab('dashboard')}>
-          <div className="bg-[#FFE600] border-2 border-black p-2 rounded-lg nb-shadow-sm flex items-center justify-center">
-            <Wallet className="w-6 h-6 text-black stroke-[3]" />
+          <div className="bg-[#FFE600] border-2 border-black p-2 rounded-lg nb-shadow-sm flex items-center justify-center text-black">
+            <Wallet className="w-6 h-6 stroke-[3]" />
           </div>
           <div>
             <h1 className="text-2xl font-black tracking-tight text-black flex items-center gap-1">
-              FIN<span className="bg-[#FFE600] px-1.5 py-0.5 border-2 border-black rounded text-black text-xl">TRACK</span>
+              FIN<span className="bg-[#FFE600] text-black px-1.5 py-0.5 border-2 border-black rounded text-xl">TRACK</span>
             </h1>
           </div>
         </div>
@@ -24,35 +24,35 @@ export default function Navbar({ activeTab, setActiveTab, onLogout }) {
         <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto py-1">
           <button
             onClick={() => setActiveTab('dashboard')}
-            className={`nb-btn ${activeTab === 'dashboard' ? 'nb-btn-primary' : 'bg-white'}`}
+            className={`nb-btn ${activeTab === 'dashboard' ? 'nb-btn-primary' : ''}`}
           >
             <LayoutDashboard className="w-4 h-4" />
             Dashboard
           </button>
           <button
             onClick={() => setActiveTab('transactions')}
-            className={`nb-btn ${activeTab === 'transactions' ? 'nb-btn-primary' : 'bg-white'}`}
+            className={`nb-btn ${activeTab === 'transactions' ? 'nb-btn-primary' : ''}`}
           >
             <Receipt className="w-4 h-4" />
             Transactions
           </button>
           <button
             onClick={() => setActiveTab('budgets')}
-            className={`nb-btn ${activeTab === 'budgets' ? 'nb-btn-primary' : 'bg-white'}`}
+            className={`nb-btn ${activeTab === 'budgets' ? 'nb-btn-primary' : ''}`}
           >
             <PiggyBank className="w-4 h-4" />
             Budgets
           </button>
           <button
             onClick={() => setActiveTab('telegram')}
-            className={`nb-btn ${activeTab === 'telegram' ? 'nb-btn-success' : 'bg-white'}`}
+            className={`nb-btn ${activeTab === 'telegram' ? 'nb-btn-success' : ''}`}
           >
             <Send className="w-4 h-4" />
             Telegram Sync
           </button>
         </div>
 
-        {/* User Info & Logout */}
+        {/* User Info, Theme Switcher & Logout */}
         <div className="flex items-center gap-3">
           {user && (
             <div className="text-right hidden sm:block">
@@ -60,6 +60,16 @@ export default function Navbar({ activeTab, setActiveTab, onLogout }) {
               <p className="text-xs font-semibold text-gray-600">{user.email}</p>
             </div>
           )}
+
+          {/* Dark Mode Switcher Button */}
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="nb-btn nb-btn-primary p-2"
+            title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          >
+            {darkMode ? <Sun className="w-5 h-5 text-black" /> : <Moon className="w-5 h-5 text-black" />}
+          </button>
+
           <button onClick={onLogout} className="nb-btn nb-btn-danger p-2" title="Logout">
             <LogOut className="w-5 h-5" />
           </button>

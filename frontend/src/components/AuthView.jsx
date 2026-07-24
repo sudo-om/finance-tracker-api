@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Wallet, ArrowRight, ShieldCheck, Zap, Send, Eye, EyeOff } from 'lucide-react';
+import { Wallet, ArrowRight, ShieldCheck, Zap, Send, Eye, EyeOff, Sun, Moon } from 'lucide-react';
 import { api, setAuthToken, setUser } from '../api';
 
-export default function AuthView({ onAuthSuccess }) {
+export default function AuthView({ onAuthSuccess, darkMode, setDarkMode }) {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -49,18 +49,29 @@ export default function AuthView({ onAuthSuccess }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#F4F0EA] flex items-center justify-center p-4">
-      <div className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+    <div className="min-h-screen bg-[#F4F0EA] flex items-center justify-center p-4 relative">
+      {/* Top Right Dark Mode Button */}
+      <div className="absolute top-4 right-4 z-50">
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="nb-btn nb-btn-primary p-2.5 rounded-lg"
+          title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+        >
+          {darkMode ? <Sun className="w-5 h-5 text-black" /> : <Moon className="w-5 h-5 text-black" />}
+        </button>
+      </div>
+
+      <div className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center pt-8 md:pt-0">
         
         {/* Left Side: Brand Teaser */}
         <div className="space-y-6">
-          <div className="inline-flex items-center gap-2 bg-[#FFE600] border-2 border-black px-3 py-1 rounded-full nb-shadow-sm">
-            <Zap className="w-4 h-4 text-black fill-black" />
+          <div className="inline-flex items-center gap-2 bg-[#FFE600] border-2 border-black px-3 py-1 rounded-full nb-shadow-sm text-black">
+            <Zap className="w-4 h-4 fill-black" />
             <span className="text-xs font-black uppercase tracking-wider">Neo-Brutalist Finance</span>
           </div>
 
           <h1 className="text-5xl font-black text-black leading-none tracking-tight">
-            TAKE CONTROL OF YOUR <span className="bg-[#00E5FF] px-2 border-2 border-black inline-block mt-2">MONEY.</span>
+            TAKE CONTROL OF YOUR <span className="bg-[#00E5FF] text-black px-2 border-2 border-black inline-block mt-2">MONEY.</span>
           </h1>
 
           <p className="text-lg font-semibold text-gray-800">
@@ -69,21 +80,21 @@ export default function AuthView({ onAuthSuccess }) {
 
           <div className="space-y-3">
             <div className="nb-card bg-white p-3 flex items-center gap-3">
-              <div className="bg-[#FFE600] border-2 border-black p-2 rounded">
+              <div className="bg-[#FFE600] border-2 border-black p-2 rounded text-black">
                 <Send className="w-5 h-5" />
               </div>
               <div>
-                <h4 className="font-black text-sm uppercase">Telegram Bot Linked</h4>
+                <h4 className="font-black text-sm uppercase text-black">Telegram Bot Linked</h4>
                 <p className="text-xs font-semibold text-gray-600">Send <code className="bg-gray-100 px-1 border border-black rounded">/spent 450 Food</code> in Telegram</p>
               </div>
             </div>
 
             <div className="nb-card bg-white p-3 flex items-center gap-3">
-              <div className="bg-[#00E5FF] border-2 border-black p-2 rounded">
+              <div className="bg-[#00E5FF] border-2 border-black p-2 rounded text-black">
                 <ShieldCheck className="w-5 h-5" />
               </div>
               <div>
-                <h4 className="font-black text-sm uppercase">Budget Alerts</h4>
+                <h4 className="font-black text-sm uppercase text-black">Budget Alerts</h4>
                 <p className="text-xs font-semibold text-gray-600">Real-time status tags: ON_TRACK, WARNING, OVER_BUDGET</p>
               </div>
             </div>
@@ -97,7 +108,7 @@ export default function AuthView({ onAuthSuccess }) {
             <button
               onClick={() => { setIsLogin(true); setError(''); }}
               className={`flex-1 py-2 font-black uppercase text-sm rounded transition-all ${
-                isLogin ? 'bg-[#FFE600] border-2 border-black nb-shadow-sm' : 'text-gray-600'
+                isLogin ? 'bg-[#FFE600] text-black border-2 border-black nb-shadow-sm' : 'text-gray-600'
               }`}
             >
               Sign In
@@ -105,7 +116,7 @@ export default function AuthView({ onAuthSuccess }) {
             <button
               onClick={() => { setIsLogin(false); setError(''); }}
               className={`flex-1 py-2 font-black uppercase text-sm rounded transition-all ${
-                !isLogin ? 'bg-[#FFE600] border-2 border-black nb-shadow-sm' : 'text-gray-600'
+                !isLogin ? 'bg-[#FFE600] text-black border-2 border-black nb-shadow-sm' : 'text-gray-600'
               }`}
             >
               Register
@@ -126,7 +137,7 @@ export default function AuthView({ onAuthSuccess }) {
             {!isLogin && (
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-black uppercase mb-1">First Name</label>
+                  <label className="block text-xs font-black uppercase mb-1 text-black">First Name</label>
                   <input
                     type="text"
                     required
@@ -137,7 +148,7 @@ export default function AuthView({ onAuthSuccess }) {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-black uppercase mb-1">Last Name</label>
+                  <label className="block text-xs font-black uppercase mb-1 text-black">Last Name</label>
                   <input
                     type="text"
                     required
@@ -151,7 +162,7 @@ export default function AuthView({ onAuthSuccess }) {
             )}
 
             <div>
-              <label className="block text-xs font-black uppercase mb-1">Email Address</label>
+              <label className="block text-xs font-black uppercase mb-1 text-black">Email Address</label>
               <input
                 type="email"
                 required
@@ -163,7 +174,7 @@ export default function AuthView({ onAuthSuccess }) {
             </div>
 
             <div>
-              <label className="block text-xs font-black uppercase mb-1">Password</label>
+              <label className="block text-xs font-black uppercase mb-1 text-black">Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}

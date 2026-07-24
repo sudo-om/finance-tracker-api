@@ -10,6 +10,10 @@ import { getAuthToken, removeAuthToken } from './api';
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem('darkMode');
+    return saved ? JSON.parse(saved) : false;
+  });
 
   useEffect(() => {
     const token = getAuthToken();
@@ -18,6 +22,15 @@ export default function App() {
     }
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem('darkMode', JSON.stringify(darkMode));
+    if (darkMode) {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+  }, [darkMode]);
+
   const handleLogout = () => {
     removeAuthToken();
     localStorage.removeItem('user');
@@ -25,12 +38,24 @@ export default function App() {
   };
 
   if (!isAuthenticated) {
-    return <AuthView onAuthSuccess={() => setIsAuthenticated(true)} />;
+    return (
+      <AuthView
+        onAuthSuccess={() => setIsAuthenticated(true)}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+      />
+    );
   }
 
   return (
     <div className="min-h-screen bg-[#F4F0EA] pb-12">
-      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} onLogout={handleLogout} />
+      <Navbar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        onLogout={handleLogout}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+      />
       <main className="max-w-7xl mx-auto px-4 pt-8">
         {activeTab === 'dashboard' && <DashboardView setActiveTab={setActiveTab} />}
         {activeTab === 'transactions' && <TransactionsView />}
