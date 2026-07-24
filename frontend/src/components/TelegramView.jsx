@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Send, KeyRound, Copy, Check, Clock, ExternalLink, ShieldCheck, Terminal } from 'lucide-react';
+import { Send, KeyRound, Copy, Check, Clock, ExternalLink, ShieldCheck, Terminal, Bot } from 'lucide-react';
 import { api } from '../api';
 
 export default function TelegramView() {
@@ -8,6 +8,9 @@ export default function TelegramView() {
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
+
+  const BOT_USERNAME = 'Xorfinancebot';
+  const BOT_URL = `https://t.me/${BOT_USERNAME}`;
 
   useEffect(() => {
     let timer;
@@ -52,11 +55,25 @@ export default function TelegramView() {
   return (
     <div className="space-y-8 max-w-4xl mx-auto">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-black uppercase tracking-tight text-black flex items-center gap-2">
-          <Send className="w-8 h-8 text-black" /> Telegram Bot Synchronization
-        </h1>
-        <p className="text-sm font-bold text-gray-700">Link your account to record expenses & income directly from Telegram</p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-black uppercase tracking-tight text-black flex items-center gap-2">
+            <Send className="w-8 h-8 text-black" /> Telegram Bot Synchronization
+          </h1>
+          <p className="text-sm font-bold text-gray-700">Link your account to record expenses & income directly from Telegram</p>
+        </div>
+
+        {/* Direct Link to Telegram Bot */}
+        <a
+          href={codeData?.code ? `${BOT_URL}?start=${codeData.code}` : BOT_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="nb-btn nb-btn-success text-sm py-2.5 px-4 self-start sm:self-auto"
+        >
+          <Bot className="w-5 h-5 text-black" />
+          Open @{BOT_USERNAME}
+          <ExternalLink className="w-4 h-4 text-black" />
+        </a>
       </div>
 
       {/* Main Grid */}
@@ -83,7 +100,7 @@ export default function TelegramView() {
           {!codeData ? (
             <div className="text-center py-6 space-y-4">
               <p className="text-xs font-bold text-black leading-relaxed">
-                Click below to generate a unique authorization code to connect your Telegram account.
+                Click below to generate a unique authorization code to connect your Telegram account with <strong>@{BOT_USERNAME}</strong>.
               </p>
               <button
                 onClick={generateCode}
@@ -118,13 +135,15 @@ export default function TelegramView() {
                   {copied ? 'Copied Command!' : 'Copy Command'}
                 </button>
 
-                <button
-                  onClick={generateCode}
+                <a
+                  href={`${BOT_URL}?start=${codeData.code}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="nb-btn bg-black text-white justify-center"
-                  title="Refresh Code"
                 >
-                  Refresh
-                </button>
+                  <Bot className="w-4 h-4" />
+                  Open Bot
+                </a>
               </div>
             </div>
           )}
@@ -132,16 +151,19 @@ export default function TelegramView() {
 
         {/* Right Column: Instructions & Bot Commands */}
         <div className="nb-card bg-white space-y-6">
-          <div className="flex items-center gap-2 border-b-2 border-black pb-3">
-            <Terminal className="w-5 h-5" />
-            <h3 className="text-lg font-black uppercase">How to Connect</h3>
+          <div className="flex items-center justify-between border-b-2 border-black pb-3">
+            <div className="flex items-center gap-2">
+              <Terminal className="w-5 h-5" />
+              <h3 className="text-lg font-black uppercase text-black">How to Connect</h3>
+            </div>
+            <span className="nb-badge nb-badge-cyan">@{BOT_USERNAME}</span>
           </div>
 
           <ol className="space-y-3 text-xs font-bold text-gray-800 list-decimal list-inside">
             <li className="leading-relaxed">Click <strong>Generate 1-Time Link Code</strong> on the left.</li>
-            <li className="leading-relaxed">Copy the code (e.g. <code className="bg-[#FFE600] px-1 border border-black rounded">/link A3B7K9X2</code>).</li>
-            <li className="leading-relaxed">Send the command to your Telegram Bot in chat.</li>
-            <li className="leading-relaxed">Look for the confirmation: <span className="nb-badge nb-badge-green py-0.5">✅ Telegram Linked</span></li>
+            <li className="leading-relaxed">Open Telegram and search for <strong>@{BOT_USERNAME}</strong> or click <a href={BOT_URL} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">t.me/{BOT_USERNAME}</a>.</li>
+            <li className="leading-relaxed">Send the command: <code className="bg-[#FFE600] px-1 border border-black rounded text-black">/link [YOUR_CODE]</code> (or click <strong>Start</strong> in Telegram).</li>
+            <li className="leading-relaxed">Look for confirmation: <span className="nb-badge nb-badge-green py-0.5">✅ Telegram Linked</span></li>
           </ol>
 
           <div className="border-2 border-black bg-[#F4F0EA] p-4 rounded space-y-3">
