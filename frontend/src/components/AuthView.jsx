@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Wallet, ArrowRight, ShieldCheck, Zap, Send } from 'lucide-react';
+import { Wallet, ArrowRight, ShieldCheck, Zap, Send, Eye, EyeOff } from 'lucide-react';
 import { api, setAuthToken, setUser } from '../api';
 
 export default function AuthView({ onAuthSuccess }) {
   const [isLogin, setIsLogin] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -163,14 +164,24 @@ export default function AuthView({ onAuthSuccess }) {
 
             <div>
               <label className="block text-xs font-black uppercase mb-1">Password</label>
-              <input
-                type="password"
-                required
-                className="nb-input"
-                placeholder="••••••••"
-                value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  className="nb-input pr-12"
+                  placeholder="••••••••"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-black hover:opacity-80 p-1"
+                  title={showPassword ? 'Hide password' : 'View password'}
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
             </div>
 
             <button
