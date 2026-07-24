@@ -1,4 +1,15 @@
-const BASE_URL = 'http://localhost:8081';
+// Dynamic API Base URL: Uses environment variable VITE_API_BASE_URL if set, or defaults to localhost:8081
+const getBaseUrl = () => {
+  const envUrl = import.meta.env.VITE_API_BASE_URL;
+  if (!envUrl) return 'http://localhost:8081';
+  let url = envUrl.trim().replace(/\/$/, '');
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    url = `https://${url}`;
+  }
+  return url;
+};
+
+const BASE_URL = getBaseUrl();
 
 export const getAuthToken = () => {
   const token = localStorage.getItem('token');
