@@ -1,12 +1,20 @@
-// Dynamic API Base URL: Uses environment variable VITE_API_BASE_URL if set, or defaults to localhost:8081
+// Dynamic API Base URL with smart production fallback to https://finance-tracker-api.onrender.com
 const getBaseUrl = () => {
   const envUrl = import.meta.env.VITE_API_BASE_URL;
-  if (!envUrl) return 'http://localhost:8081';
-  let url = envUrl.trim().replace(/\/$/, '');
-  if (!url.startsWith('http://') && !url.startsWith('https://')) {
-    url = `https://${url}`;
+  if (envUrl && envUrl.trim()) {
+    let url = envUrl.trim().replace(/\/$/, '');
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      url = `https://${url}`;
+    }
+    return url;
   }
-  return url;
+
+  // Automatic production fallback when deployed on cloud (Render / Vercel / Netlify)
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    return 'https://finance-tracker-api.onrender.com';
+  }
+
+  return 'http://localhost:8081';
 };
 
 export const BASE_URL = getBaseUrl();
