@@ -14,7 +14,7 @@ services:
       - key: SPRING_DATASOURCE_URL
         fromDatabase:
           name: finance-tracker-db
-          property: jdbcConnectionString
+          property: connectionString
       - key: JWT_SECRET
         generateValue: true
       - key: TELEGRAM_BOT_TOKEN
