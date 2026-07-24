@@ -43,6 +43,7 @@ public interface BudgetRepository extends JpaRepository<Budget, Long> {
             User user
     );
 
+    @org.springframework.data.jpa.repository.EntityGraph(attributePaths = {"category"})
     List<Budget> findByUser(
             User user
     );

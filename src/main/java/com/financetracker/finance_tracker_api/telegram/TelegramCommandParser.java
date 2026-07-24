@@ -15,7 +15,7 @@ public class TelegramCommandParser {
 
         String[] parts = message.trim().split("\\s+", 4);
 
-        if (parts.length < 4 || !"spent".equalsIgnoreCase(parts[0])) {
+        if (parts.length < 4 || (!"spent".equalsIgnoreCase(parts[0]) && !"/spent".equalsIgnoreCase(parts[0]))) {
             throw invalidFormat();
         }
 
@@ -38,7 +38,7 @@ public class TelegramCommandParser {
 
         String[] parts = message.trim().split("\\s+", 3);
 
-        if (parts.length < 3 || !"income".equalsIgnoreCase(parts[0])) {
+        if (parts.length < 3 || (!"income".equalsIgnoreCase(parts[0]) && !"/income".equalsIgnoreCase(parts[0]))) {
             throw invalidIncomeFormat();
         }
 

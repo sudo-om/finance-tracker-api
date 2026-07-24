@@ -86,7 +86,9 @@ public class ExpenseServiceImpl implements ExpenseService {
         Category category = categoryRepository
                 .findById(request.getCategoryId())
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Category not found"));
+                        new ResourceNotFoundException(
+                                "Category not found with id: " + request.getCategoryId()
+                        ));
 
         Expense expense = Expense.builder()
                 .title(request.getTitle())
@@ -101,7 +103,19 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         Expense savedExpense = expenseRepository.saveAndFlush(expense);
 
-        telegramService.sendMessage(buildExpenseMessage(savedExpense));
+        /*
+         * Bug fix 2: Send the Telegram notification to the expense owner's
+         * actual chatId, not the hardcoded telegram.chat.id from config.
+         * sendMessage(String) uses a hardcoded chatId — it must never be called
+         * here because it would notify a fixed account regardless of who made
+         * the expense. Only notify if the user has Telegram linked.
+         */
+        if (user.getTelegramChatId() != null) {
+            telegramService.sendMessage(
+                    user.getTelegramChatId(),
+                    buildExpenseMessage(savedExpense)
+            );
+        }
 
         return expenseMapper.toResponse(savedExpense);
     }
@@ -178,7 +192,7 @@ public class ExpenseServiceImpl implements ExpenseService {
                         .findById(request.getCategoryId())
                         .orElseThrow(() ->
                                 new ResourceNotFoundException(
-                                        "Category not found"
+                                        "Category not found with id: " + request.getCategoryId()
                                 ));
         expense.setTitle(request.getTitle());
         expense.setDescription(request.getDescription());

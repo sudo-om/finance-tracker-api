@@ -47,6 +47,27 @@ class TelegramCommandParserTest {
     }
 
     @Test
+    void parsesSpentCommandWithSlashPrefix() {
+
+        ParsedExpense expense =
+                parser.parse("/spent 450 Food Domino's Pizza");
+
+        assertEquals(new BigDecimal("450"), expense.getAmount());
+        assertEquals("Food", expense.getCategory());
+        assertEquals("Domino's Pizza", expense.getMerchant());
+    }
+
+    @Test
+    void parsesIncomeCommandWithSlashPrefix() {
+
+        ParsedIncome income =
+                parser.parseIncome("/income 50000 Freelance Work");
+
+        assertEquals(new BigDecimal("50000"), income.getAmount());
+        assertEquals("Freelance Work", income.getSource());
+    }
+
+    @Test
     void rejectsInvalidIncomeAmounts() {
 
         assertThrows(IllegalArgumentException.class,

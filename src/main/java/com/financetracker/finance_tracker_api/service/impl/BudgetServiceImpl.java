@@ -62,6 +62,15 @@ public class BudgetServiceImpl implements BudgetService {
 
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public BudgetResponse toBudgetResponse(
+            Budget budget,
+            User user
+    ) {
+        return buildBudgetResponse(budget, user);
+    }
+
     private BudgetResponse buildBudgetResponse(
             Budget budget,
             User currentUser
@@ -124,6 +133,16 @@ public class BudgetServiceImpl implements BudgetService {
         User currentUser =
                 currentUserService.getCurrentUser();
 
+        return createBudget(request, currentUser);
+    }
+
+    @Override
+    @Transactional
+    public BudgetResponse createBudget(
+            BudgetCreateRequest request,
+            User user
+    ) {
+
         Category category =
                 categoryRepository.findById(
                         request.getCategoryId()
@@ -133,19 +152,15 @@ public class BudgetServiceImpl implements BudgetService {
                         )
                 );
 
-        // Validation 1
-
         if (request.getStartDate().isAfter(request.getEndDate())) {
             throw new IllegalArgumentException(
                     "Start date cannot be after end date"
             );
         }
 
-        // Validation 2
-
         boolean exists =
                 budgetRepository.existsByUserAndCategoryAndStartDateAndEndDate(
-                        currentUser,
+                        user,
                         category,
                         request.getStartDate(),
                         request.getEndDate()
@@ -153,7 +168,7 @@ public class BudgetServiceImpl implements BudgetService {
 
         if (exists) {
             throw new IllegalArgumentException(
-                    "Budget already exists for this category and date range"
+                    "Budget already exists for " + category.getName() + " in this date range"
             );
         }
 
@@ -162,15 +177,14 @@ public class BudgetServiceImpl implements BudgetService {
                         .amount(request.getAmount())
                         .startDate(request.getStartDate())
                         .endDate(request.getEndDate())
-                        .user(currentUser)
+                        .user(user)
                         .category(category)
                         .build();
 
         Budget savedBudget =
                 budgetRepository.saveAndFlush(budget);
 
-        return budgetMapper.toResponse(savedBudget);
-
+        return buildBudgetResponse(savedBudget, user);
     }
 
     @Override

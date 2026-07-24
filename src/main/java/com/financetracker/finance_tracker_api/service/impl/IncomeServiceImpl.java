@@ -16,6 +16,7 @@ import com.financetracker.finance_tracker_api.repository.IncomeRepository;
 import com.financetracker.finance_tracker_api.service.CurrentUserService;
 import com.financetracker.finance_tracker_api.service.IncomeService;
 import com.financetracker.finance_tracker_api.specification.IncomeSpecificationBuilder;
+import com.financetracker.finance_tracker_api.telegram.TelegramService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -35,6 +36,7 @@ public class IncomeServiceImpl implements IncomeService {
     private final IncomeRepository incomeRepository;
     private final IncomeMapper incomeMapper;
     private final IncomeSpecificationBuilder incomeSpecificationBuilder;
+    private final TelegramService telegramService;
 
     @Override
     @Transactional
@@ -60,7 +62,7 @@ public class IncomeServiceImpl implements IncomeService {
                         .findById(request.getCategoryId())
                         .orElseThrow(() ->
                                 new ResourceNotFoundException(
-                                        "Category not found"
+                                        "Category not found with id: " + request.getCategoryId()
                                 ));
 
         // Build Income
@@ -77,8 +79,29 @@ public class IncomeServiceImpl implements IncomeService {
         Income savedIncome =
                 incomeRepository.saveAndFlush(income);
 
+        if (user.getTelegramChatId() != null) {
+            telegramService.sendMessage(
+                    user.getTelegramChatId(),
+                    buildIncomeMessage(savedIncome)
+            );
+        }
+
         // Return Mapper
         return incomeMapper.toResponse(savedIncome);
+    }
+
+    private String buildIncomeMessage(Income income) {
+        return String.format(
+                "💰 *New Income Added!*\n\n" +
+                        "• *Source:* %s\n" +
+                        "• *Amount:* ₹%s\n" +
+                        "• *Category:* %s\n" +
+                        "• *Date:* %s",
+                income.getSource(),
+                income.getAmount(),
+                income.getCategory().getName(),
+                income.getIncomeDate()
+        );
     }
 
     @Override
@@ -164,7 +187,7 @@ public class IncomeServiceImpl implements IncomeService {
                         .findById(request.getCategoryId())
                         .orElseThrow(() ->
                                 new ResourceNotFoundException(
-                                        "Category not found"
+                                        "Category not found with id: " + request.getCategoryId()
                                 ));
 
         income.setAmount(request.getAmount());
