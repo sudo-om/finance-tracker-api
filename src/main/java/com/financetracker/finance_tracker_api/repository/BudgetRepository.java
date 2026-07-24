@@ -47,4 +47,11 @@ public interface BudgetRepository extends JpaRepository<Budget, Long> {
             User user
     );
 
+    Optional<Budget> findFirstByUserAndCategory_NameIgnoreCaseAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
+            User user,
+            String categoryName,
+            LocalDate startDate,
+            LocalDate endDate
+    );
+
 }

@@ -30,8 +30,15 @@ public class DashboardServiceImpl implements DashboardService {
 
         User currentUser = currentUserService.getCurrentUser();
 
+        return getSummary(currentUser);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public DashboardSummaryResponse getSummary(User user) {
+
         DashboardSummaryProjection projection =
-                expenseRepository.getDashboardSummary(currentUser);
+                expenseRepository.getDashboardSummary(user);
 
         return DashboardSummaryResponse.builder()
                 .totalExpense(projection.getTotalExpense())
@@ -103,11 +110,18 @@ public class DashboardServiceImpl implements DashboardService {
 
         User currentUser = currentUserService.getCurrentUser();
 
+        return getBalance(currentUser);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public BalanceResponse getBalance(User user) {
+
         BigDecimal totalIncome =
-                incomeRepository.getTotalIncome(currentUser);
+                incomeRepository.getTotalIncome(user);
 
         BigDecimal totalExpense =
-                expenseRepository.getTotalExpense(currentUser);
+                expenseRepository.getTotalExpense(user);
 
         BigDecimal currentBalance =
                 totalIncome.subtract(totalExpense);

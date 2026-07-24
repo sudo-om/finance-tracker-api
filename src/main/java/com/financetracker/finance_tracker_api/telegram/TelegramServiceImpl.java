@@ -23,6 +23,12 @@ public class TelegramServiceImpl implements TelegramService {
     @Override
     public void sendMessage(String message) {
 
+        sendMessage(chatId, message);
+    }
+
+    @Override
+    public void sendMessage(Long chatId, String message) {
+
         String url =
                 "https://api.telegram.org/bot"
                         + token

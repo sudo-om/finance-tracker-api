@@ -4,6 +4,7 @@ import com.financetracker.finance_tracker_api.dto.request.BudgetCreateRequest;
 import com.financetracker.finance_tracker_api.dto.response.BudgetResponse;
 import com.financetracker.finance_tracker_api.dto.response.PagedResponse;
 import com.financetracker.finance_tracker_api.dto.request.BudgetUpdateRequest;
+import com.financetracker.finance_tracker_api.entity.User;
 
 import org.springframework.data.domain.Pageable;
 
@@ -14,6 +15,8 @@ public interface BudgetService {
     BudgetResponse createBudget(BudgetCreateRequest request);
 
     BudgetResponse getBudgetById(UUID id);
+
+    BudgetResponse getCurrentBudget(User user, String categoryName);
 
     PagedResponse<BudgetResponse> getAllBudgets(
             Pageable pageable

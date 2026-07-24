@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -241,6 +242,31 @@ public class BudgetServiceImpl implements BudgetService {
                 budget,
                 currentUser
         );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public BudgetResponse getCurrentBudget(
+            User user,
+            String categoryName
+    ) {
+
+        LocalDate today = LocalDate.now();
+
+        Budget budget = budgetRepository
+                .findFirstByUserAndCategory_NameIgnoreCaseAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
+                        user,
+                        categoryName,
+                        today,
+                        today
+                )
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "No active budget found for " + categoryName + "."
+                        )
+                );
+
+        return buildBudgetResponse(budget, user);
     }
 
     @Override

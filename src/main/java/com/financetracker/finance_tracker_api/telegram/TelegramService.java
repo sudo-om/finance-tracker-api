@@ -4,4 +4,6 @@ public interface TelegramService {
 
     void sendMessage(String message);
 
+    void sendMessage(Long chatId, String message);
+
 }

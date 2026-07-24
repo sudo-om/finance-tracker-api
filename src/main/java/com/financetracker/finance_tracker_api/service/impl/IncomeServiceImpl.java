@@ -45,6 +45,16 @@ public class IncomeServiceImpl implements IncomeService {
         User currentUser =
                 currentUserService.getCurrentUser();
 
+        return createIncome(request, currentUser);
+    }
+
+    @Override
+    @Transactional
+    public IncomeResponse createIncome(
+            IncomeCreateRequest request,
+            User user
+    ) {
+
         Category category =
                 categoryRepository
                         .findById(request.getCategoryId())
@@ -59,7 +69,7 @@ public class IncomeServiceImpl implements IncomeService {
                 .source(request.getSource())
                 .description(request.getDescription())
                 .incomeDate(request.getIncomeDate())
-                .user(currentUser)
+                .user(user)
                 .category(category)
                 .build();
 
