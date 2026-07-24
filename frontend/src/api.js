@@ -9,7 +9,7 @@ const getBaseUrl = () => {
   return url;
 };
 
-const BASE_URL = getBaseUrl();
+export const BASE_URL = getBaseUrl();
 
 export const getAuthToken = () => {
   const token = localStorage.getItem('token');
@@ -41,28 +41,36 @@ const headers = () => {
 };
 
 async function request(endpoint, options = {}) {
-  const res = await fetch(`${BASE_URL}${endpoint}`, {
-    ...options,
-    headers: {
-      ...headers(),
-      ...(options.headers || {}),
-    },
-  });
+  const targetUrl = `${BASE_URL}${endpoint}`;
+  try {
+    const res = await fetch(targetUrl, {
+      ...options,
+      headers: {
+        ...headers(),
+        ...(options.headers || {}),
+      },
+    });
 
-  if (res.status === 204) return true;
+    if (res.status === 204) return true;
 
-  const data = await res.json().catch(() => ({}));
+    const data = await res.json().catch(() => ({}));
 
-  if (!res.ok) {
-    throw new Error(data.message || data.error || `Request failed (${res.status})`);
+    if (!res.ok) {
+      throw new Error(data.message || data.error || `Request failed (${res.status})`);
+    }
+
+    // Automatically unwrap Spring Boot ApiResponse wrapper if present
+    if (data && typeof data === 'object' && 'data' in data && data.data !== null && data.data !== undefined) {
+      return data.data;
+    }
+
+    return data;
+  } catch (err) {
+    if (err.name === 'TypeError' && err.message === 'Failed to fetch') {
+      throw new Error(`Unable to connect to backend API (${BASE_URL}). If using Render free tier, the backend service may be waking up from sleep. Please try again in 20-30 seconds.`);
+    }
+    throw err;
   }
-
-  // Automatically unwrap Spring Boot ApiResponse wrapper if present
-  if (data && typeof data === 'object' && 'data' in data && data.data !== null && data.data !== undefined) {
-    return data.data;
-  }
-
-  return data;
 }
 
 export const api = {
