@@ -44,4 +44,4 @@ databases:
   - name: finance-tracker-db
     plan: free
     databaseName: financetracker
-    user: postgres
+    user: financetracker_user
