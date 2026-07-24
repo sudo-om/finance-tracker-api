@@ -17,17 +17,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 
+import com.financetracker.finance_tracker_api.security.CustomUserDetailsService;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private final AuthenticationManager authenticationManager;
-
     private final JwtService jwtService;
-
     private final UserService userService;
-
     private final UserMapper userMapper;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Override
     public AuthResponse register(RegisterRequest request) {
@@ -36,8 +36,12 @@ public class AuthServiceImpl implements AuthService {
 
         UserResponse response = userMapper.toResponse(savedUser);
 
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(savedUser.getEmail());
+        String jwt = jwtService.generateToken(userDetails);
+
         return AuthResponse.builder()
-                .accessToken(null)
+                .accessToken(jwt)
+                .expiresIn(86400000L)
                 .user(response)
                 .build();
 

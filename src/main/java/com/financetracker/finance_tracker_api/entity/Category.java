@@ -28,12 +28,14 @@ public class Category extends BaseEntity {
     @Column(length = 20)
     private String color;
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @OneToMany(
             mappedBy = "category",
             fetch = FetchType.LAZY
     )
     private List<Expense> expenses = new ArrayList<>();
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @OneToMany(
             mappedBy = "category",
             fetch = FetchType.LAZY

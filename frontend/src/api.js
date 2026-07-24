@@ -1,0 +1,111 @@
+const BASE_URL = 'http://localhost:8081';
+
+export const getAuthToken = () => {
+  const token = localStorage.getItem('token');
+  if (!token || token === 'null' || token === 'undefined') return null;
+  return token;
+};
+
+export const setAuthToken = (token) => {
+  if (token && token !== 'null' && token !== 'undefined') {
+    localStorage.setItem('token', token);
+  } else {
+    localStorage.removeItem('token');
+  }
+};
+
+export const removeAuthToken = () => localStorage.removeItem('token');
+export const getUser = () => {
+  const user = localStorage.getItem('user');
+  return user ? JSON.parse(user) : null;
+};
+export const setUser = (user) => localStorage.setItem('user', JSON.stringify(user));
+
+const headers = () => {
+  const token = getAuthToken();
+  return {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+};
+
+async function request(endpoint, options = {}) {
+  const res = await fetch(`${BASE_URL}${endpoint}`, {
+    ...options,
+    headers: {
+      ...headers(),
+      ...(options.headers || {}),
+    },
+  });
+
+  if (res.status === 204) return true;
+
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    throw new Error(data.message || data.error || `Request failed (${res.status})`);
+  }
+
+  // Automatically unwrap Spring Boot ApiResponse wrapper if present
+  if (data && typeof data === 'object' && 'data' in data && data.data !== null && data.data !== undefined) {
+    return data.data;
+  }
+
+  return data;
+}
+
+export const api = {
+  login: (email, password) =>
+    request('/api/v1/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    }),
+
+  register: (firstName, lastName, email, password) =>
+    request('/api/v1/auth/register', {
+      method: 'POST',
+      body: JSON.stringify({ firstName, lastName, email, password }),
+    }),
+
+  getCategories: () => request('/api/v1/categories'),
+  getBalance: () => request('/api/v1/dashboard/balance'),
+  getSummary: () => request('/api/v1/dashboard/summary'),
+
+  getExpenses: (page = 0, size = 20) => request(`/api/v1/expenses?page=${page}&size=${size}`),
+  createExpense: (data) =>
+    request('/api/v1/expenses', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  deleteExpense: (id) =>
+    request(`/api/v1/expenses/${id}`, {
+      method: 'DELETE',
+    }),
+
+  getIncomes: (page = 0, size = 20) => request(`/api/v1/incomes?page=${page}&size=${size}`),
+  createIncome: (data) =>
+    request('/api/v1/incomes', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  deleteIncome: (id) =>
+    request(`/api/v1/incomes/${id}`, {
+      method: 'DELETE',
+    }),
+
+  getBudgets: () => request('/api/v1/budgets'),
+  createBudget: (data) =>
+    request('/api/v1/budgets', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  deleteBudget: (id) =>
+    request(`/api/v1/budgets/${id}`, {
+      method: 'DELETE',
+    }),
+
+  generateTelegramLinkCode: () =>
+    request('/api/v1/telegram/link-code', {
+      method: 'POST',
+    }),
+};

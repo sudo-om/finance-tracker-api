@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;900&family=Inter:wght@400;600;800;900&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #F4F0EA;
+  color: #0F0F12;
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* Neo-Brutalism Design Utilities */
+.nb-border {
+  border: 2px solid #000000;
+}
+
+.nb-border-thick {
+  border: 3px solid #000000;
+}
+
+.nb-shadow {
+  box-shadow: 4px 4px 0px 0px #000000;
+}
+
+.nb-shadow-sm {
+  box-shadow: 2px 2px 0px 0px #000000;
+}
+
+.nb-shadow-lg {
+  box-shadow: 6px 6px 0px 0px #000000;
+}
+
+.nb-card {
+  background-color: #FFFFFF;
+  border: 3px solid #000000;
+  box-shadow: 5px 5px 0px 0px #000000;
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.nb-card-yellow {
+  background-color: #FFE600;
+  border: 3px solid #000000;
+  box-shadow: 5px 5px 0px 0px #000000;
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.nb-card-cyan {
+  background-color: #00E5FF;
+  border: 3px solid #000000;
+  box-shadow: 5px 5px 0px 0px #000000;
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.nb-card-pink {
+  background-color: #FF2A85;
+  color: #FFFFFF;
+  border: 3px solid #000000;
+  box-shadow: 5px 5px 0px 0px #000000;
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.nb-btn {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.6rem 1.2rem;
+  border: 2px solid #000000;
+  box-shadow: 3px 3px 0px 0px #000000;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+  background-color: #FFFFFF;
+  color: #000000;
+}
+
+.nb-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px 0px #000000;
+}
+
+.nb-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px 0px #000000;
+}
+
+.nb-btn-primary {
+  background-color: #FFE600;
+  color: #000000;
+}
+
+.nb-btn-success {
+  background-color: #00E5FF;
+  color: #000000;
+}
+
+.nb-btn-danger {
+  background-color: #FF2A85;
+  color: #FFFFFF;
+}
+
+.nb-btn-dark {
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+.nb-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 2px solid #000000;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+  outline: none;
+  transition: all 0.1s ease;
+}
+
+.nb-input:focus {
+  background-color: #FFFDE6;
+  box-shadow: 3px 3px 0px 0px #000000;
+}
+
+.nb-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 2px solid #000000;
+  border-radius: 4px;
+  box-shadow: 2px 2px 0px 0px #000000;
+}
+
+.nb-badge-yellow { background-color: #FFE600; color: #000; }
+.nb-badge-cyan { background-color: #00E5FF; color: #000; }
+.nb-badge-pink { background-color: #FF2A85; color: #FFF; }
+.nb-badge-green { background-color: #10B981; color: #FFF; }
+.nb-badge-gray { background-color: #E5E7EB; color: #000; }
+
+.nb-progress-bg {
+  width: 100%;
+  height: 16px;
+  border: 2px solid #000000;
+  border-radius: 4px;
+  background-color: #FFFFFF;
+  overflow: hidden;
+  position: relative;
+}
+
+.nb-progress-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.nb-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+}
