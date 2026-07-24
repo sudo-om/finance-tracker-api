@@ -18,4 +18,5 @@ WORKDIR /app
 # Copy Compiled Spring Boot Executable JAR
 COPY --from=backend-builder /app/target/*.jar app.jar
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Dynamic Port Entrypoint for Cloud Providers (Render, Railway, Fly.io)
+ENTRYPOINT ["sh", "-c", "java -Dserver.port=${PORT:-8081} -jar app.jar"]
