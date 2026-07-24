@@ -1,4 +1,4 @@
-// Dynamic API Base URL with smart production fallback to https://finance-tracker-api.onrender.com
+// Dynamic API Base URL with fallback to your deployed Render API service
 const getBaseUrl = () => {
   const envUrl = import.meta.env.VITE_API_BASE_URL;
   if (envUrl && envUrl.trim()) {
@@ -9,9 +9,9 @@ const getBaseUrl = () => {
     return url;
   }
 
-  // Automatic production fallback when deployed on cloud (Render / Vercel / Netlify)
+  // Automatic production fallback to your live Render API service
   if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-    return 'https://finance-tracker-api.onrender.com';
+    return 'https://finance-tracker-api-ye1m.onrender.com';
   }
 
   return 'http://localhost:8081';
