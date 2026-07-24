@@ -4,10 +4,11 @@
 [![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5.0-green.svg?style=for-the-badge&logo=springboot)](https://spring.io/projects/spring-boot)
 [![React](https://img.shields.io/badge/React-18.0-blue.svg?style=for-the-badge&logo=react)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.4-purple.svg?style=for-the-badge&logo=vite)](https://vitejs.dev/)
-[![Telegram Bot](https://img.shields.io/badge/Telegram_Bot-API-2CA5E0.svg?style=for-the-badge&logo=telegram)](https://core.telegram.org/bots/api)
+[![CI/CD Pipeline](https://img.shields.io/badge/CI%2FCD-GitHub_Actions-2088FF.svg?style=for-the-badge&logo=githubactions)](https://github.com/sudo-om/finance-tracker-api/actions)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg?style=for-the-badge&logo=docker)](https://www.docker.com/)
 [![License](https://img.shields.io/badge/License-MIT-black.svg?style=for-the-badge)](LICENSE)
 
-> A full-stack, high-performance financial management platform featuring a bold **Neo-Brutalist Web Dashboard** and **Real-Time Telegram Bot Synchronization**. Record transactions, track budgets, and receive instant spending alerts straight from Telegram or your desktop browser.
+> A full-stack, high-performance financial management platform featuring a bold **Neo-Brutalist Web Dashboard**, **Real-Time Telegram Bot Synchronization**, and automated **GitHub Actions CI/CD Pipelines**. Record transactions, track budgets, and receive instant spending alerts straight from Telegram or your desktop browser.
 
 ---
 
@@ -25,38 +26,14 @@ Generate a secure, 1-time 8-character OTP code to link your Telegram account in 
 
 ---
 
-## 🔥 Key Features
-
-- **⚡ Real-Time Telegram Sync**: Log expenses or income via simple text messages (e.g. `/spent 450 Food Domino's` or `/income 50000 Salary`). The bot immediately processes the transaction and sends instant notifications.
-- **🎨 Neo-Brutalist Web UI**: Designed with high contrast, 3px solid black borders, non-interpolated hard drop shadows (`5px 5px 0px 0px #000`), Electric Yellow (`#FFE600`), Mint Cyan (`#00E5FF`), and Bright Pink (`#FF2A85`) accents.
-- **📊 Budget & Threshold Monitoring**: Set weekly, monthly, or yearly spending limits per category. Visual progress bars indicate percent used, remaining allowance, and status alerts.
-- **📂 Dynamic Category Engine**: Auto-seeds default expense and income categories with icons and color tokens (`Food`, `Transport`, `Shopping`, `Bills`, `Salary`, etc.).
-- **🔐 Secure JWT Authentication**: Stateless security architecture using JSON Web Tokens, BCrypt password hashing, and user-scoped data protection.
-- **⚙️ RESTful API**: Built with clean architecture, MapStruct DTO mapping, and standardized `ApiResponse<T>` wrappers.
-
----
-
-## 🛠️ Tech Stack & Architecture
-
-### Backend
-- **Framework**: Spring Boot 3.5.0 (Java 21)
-- **Security**: Spring Security 6 with JWT Stateless Authentication
-- **Database / ORM**: PostgreSQL / H2 Database with Spring Data JPA
-- **Integrations**: TelegramBots Spring Boot Starter
-- **Utilities**: Lombok, MapStruct, Bean Validation (Jakarta Validation)
-
-### Frontend
-- **Framework**: React 18 with Vite 5
-- **Styling**: Vanilla CSS Neo-Brutalist Design System + Tailwind CSS
-- **Icons**: Lucide React Icons
-- **HTTP Client**: Native Fetch API with auto-unwrapping and token handling
-
----
-
-## 📁 Project Structure
+## 📂 Repository File Structure
 
 ```
 finance-tracker-api/
+├── .github/
+│   └── workflows/
+│       ├── ci.yml                    # CI/CD Pipeline (Build, Test & Artifact Validation)
+│       └── release.yml               # Automated GitHub Production Release Pipeline
 ├── docs/
 │   └── images/                       # Screenshots and visual previews for documentation
 │       ├── dashboard_preview.png
@@ -65,15 +42,15 @@ finance-tracker-api/
 │   ├── public/
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── Navbar.jsx            # Top navigation bar & tab manager
-│   │   │   ├── AuthView.jsx          # Login & Registration component
+│   │   │   ├── Navbar.jsx            # Top navigation bar & Gen-Z Dark Mode toggle
+│   │   │   ├── AuthView.jsx          # Login, Register & View Password toggle
 │   │   │   ├── DashboardView.jsx     # Financial summary cards & budget progress
-│   │   │   ├── TransactionsView.jsx  # Expense/Income manager & category modals
+│   │   │   ├── TransactionsView.jsx  # Expense/Income manager & dynamic category modals
 │   │   │   ├── BudgetsView.jsx       # Budget tracker & category limit modals
 │   │   │   └── TelegramView.jsx      # Telegram OTP generator & command cheatsheet
 │   │   ├── api.js                    # API client with token & response unwrapping
 │   │   ├── App.jsx                   # Main application shell
-│   │   └── index.css                 # Neo-Brutalist CSS design system tokens
+│   │   └── index.css                 # Gen-Z Neo-Brutalist CSS design system tokens
 │   ├── package.json
 │   └── vite.config.js
 ├── src/                              # Spring Boot REST API & Telegram Engine
@@ -88,40 +65,48 @@ finance-tracker-api/
 │       ├── security/                 # JwtService, JwtAuthenticationFilter, CustomUserDetailsService
 │       ├── service/                  # Service interfaces & implementations
 │       └── telegram/                 # TelegramScheduler polling engine & TelegramCommandParser
-├── pom.xml
-└── README.md
+├── .gitignore                        # Standard Git exclusion rules
+├── Dockerfile                        # Multi-stage production container build
+├── docker-compose.yml                # Multi-container service setup (PostgreSQL + API)
+├── pom.xml                           # Maven dependencies & build metadata
+└── README.md                         # Main repository documentation
 ```
 
 ---
 
-## 📜 Rules, Regulations & System Policies
+## ⚙️ GitHub Actions CI/CD Pipeline
 
-To ensure platform reliability, data security, and consistency, the system enforces the following core governance rules:
+The project features a **2-stage GitHub Actions Automation Pipeline** located in `.github/workflows/`:
 
-### 1. Security & Authentication Policies
-- **Token Handling**: All API requests to `/api/v1/**` (except `/api/v1/auth/**` and `/api/v1/categories/**`) require a valid HTTP header: `Authorization: Bearer <JWT_TOKEN>`.
-- **Preflight Access**: All HTTP `OPTIONS` preflight requests are permitted unauthenticated to prevent CORS blocking on web clients.
-- **Password Hashing**: User passwords must be hashed using BCrypt before persistence; raw passwords are never logged or stored.
+### 1. Continuous Integration (`.github/workflows/ci.yml`)
+Triggers on every `push` and `pull_request` to `main` / `master`:
+- **☕ Backend CI (Java 21 / Spring Boot)**:
+  - Sets up JDK 21 Temurin with Maven dependency caching.
+  - Compiles source files (`./mvnw compile`).
+  - Runs automated unit & integration test suites (`./mvnw test`).
+  - Packages production JAR (`./mvnw package -DskipTests`) and stores it as a workflow artifact.
+- **⚡ Frontend CI (Node.js 20 / React 18)**:
+  - Sets up Node.js 20 with `npm` dependency caching.
+  - Installs packages (`npm ci`).
+  - Builds production Vite static bundle (`npm run build`).
+  - Uploads `dist/` build bundle as a workflow artifact.
+- **🐳 Docker Validation**:
+  - Validates multi-stage `Dockerfile` image builds automatically.
 
-### 2. Data Isolation & Privacy Rules
-- **User Scoping**: Every database query for transactions, balances, or budgets is strictly scoped to the authenticated user ID (`findByUser`). Users can never access or modify another user's financial records.
-- **Telegram Linking Privacy**: Telegram account linking requires explicit 1-time OTP verification (`/link <code>`). A Telegram account can only be linked to one user account at a time.
+### 2. Production Release (`.github/workflows/release.yml`)
+Triggers on tag creation (`v*`) or manual execution (`workflow_dispatch`):
+- Packages release binaries (`.jar` and `frontend-dist.zip`).
+- Publishes automated GitHub Release notes and downloadable assets.
 
-### 3. Telegram Link OTP Expiration Policy
-- **Validity Window**: OTP link codes generated via `/api/v1/telegram/link-code` expire automatically after **10 minutes**.
-- **Single Use**: Once a link code is used by the Telegram bot, it is immediately invalidated and deleted from the database.
+---
 
-### 4. API Standardization Rules
-- **Response Wrapper**: All REST endpoints return data formatted inside the standard `ApiResponse<T>` envelope:
-  ```json
-  {
-    "success": true,
-    "message": "Operation description",
-    "data": { ... },
-    "timestamp": "2026-07-24T17:00:00"
-  }
-  ```
-- **Error Handling**: API errors return a clean JSON payload with HTTP error status (e.g. `400 Bad Request`, `401 Unauthorized`, `404 Not Found`).
+## 🔥 Key Features
+
+- **⚡ Real-Time Telegram Sync**: Log expenses or income via simple text messages (e.g. `/spent 450 Food Domino's` or `/income 50000 Salary`). The bot immediately processes the transaction and sends instant notifications.
+- **🎨 Gen-Z Neo-Brutalist Web UI**: Designed with high contrast, 3px solid black borders, hard drop shadows, and dark slate `#1E1E26` containers in Dark Mode.
+- **📊 Budget & Threshold Monitoring**: Set weekly, monthly, or yearly spending limits per category. Visual progress bars indicate percent used, remaining allowance, and status alerts (`ON_TRACK`, `WARNING`, `OVER_BUDGET`).
+- **📂 Dynamic Category Engine**: Auto-seeds default expense and income categories with icons and color tokens (`Food`, `Transport`, `Shopping`, `Bills`, `Salary`, etc.).
+- **🔐 Secure JWT Authentication**: Stateless security architecture using JSON Web Tokens, BCrypt password hashing, and user-scoped data protection.
 
 ---
 
@@ -143,17 +128,9 @@ Send any of the following commands to your configured Telegram Bot:
 
 ---
 
-## 🚀 Getting Started & User Guide
+## 🚀 Getting Started & Local Setup
 
-### Prerequisites
-- **Java**: Development Kit (JDK) 21 or higher
-- **Node.js**: v20.0.0 or higher & `npm`
-- **Database**: PostgreSQL (or in-memory H2 for development)
-- **Telegram**: A Telegram Bot token created via [@BotFather](https://t.me/BotFather)
-
----
-
-### Step 1: Backend Setup & Configuration
+### Option 1: Using Docker Compose (Recommended)
 
 1. Clone the repository:
    ```bash
@@ -161,98 +138,34 @@ Send any of the following commands to your configured Telegram Bot:
    cd finance-tracker-api
    ```
 
-2. Configure environment variables in `src/main/resources/application.yml` (or create a `.env` file):
-   ```yaml
-   spring:
-     datasource:
-       url: jdbc:postgresql://localhost:5432/financetracker
-       username: postgres
-       password: yourpassword
-   
-   jwt:
-     secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-     expiration: 86400000
-
-   telegram:
-     bot:
-       token: YOUR_TELEGRAM_BOT_TOKEN
-       username: YOUR_TELEGRAM_BOT_USERNAME
+2. Start PostgreSQL & API using Docker Compose:
+   ```bash
+   docker-compose up -d --build
    ```
 
-3. Build and run the Spring Boot server:
+---
+
+### Option 2: Manual Local Setup
+
+#### Backend Setup
+1. Configure credentials in `src/main/resources/application.yml` or set environment variables.
+2. Build and run:
    ```bash
    ./mvnw clean spring-boot:run
    ```
-   The backend API will start at **`http://localhost:8081`**.
+   Backend API runs at **`http://localhost:8081`**.
 
----
-
-### Step 2: Frontend Setup & Configuration
-
-1. Open a new terminal window and navigate to the `frontend` directory:
+#### Frontend Setup
+1. Navigate to the `frontend` folder:
    ```bash
    cd frontend
    ```
-
-2. Install dependencies:
+2. Install & run:
    ```bash
    npm install
-   ```
-
-3. Start the Vite development server:
-   ```bash
    npm run dev -- --host
    ```
-   The web application will launch at **`http://localhost:5173`** (or `5174`/`5175`).
-
----
-
-### Step 3: Linking Telegram Account & Usage
-
-1. Open the Web Application at `http://localhost:5173`.
-2. Click **Register** to create a new user account (or **Sign In** if you already have an account).
-3. Navigate to the **Telegram Sync** tab in the top navigation bar.
-4. Click **Generate 1-Time Link Code**.
-5. Copy the generated command (e.g. `/link A3B7K9X2`).
-6. Open your Telegram Bot and send the command.
-7. You will receive an instant confirmation message:
-   ```
-   ✅ Account successfully linked! You can now send spending updates directly in this chat.
-   ```
-
----
-
-## 📡 API Endpoint Summary
-
-### Authentication (`/api/v1/auth`)
-- `POST /api/v1/auth/register` — Register a new user account & return JWT token.
-- `POST /api/v1/auth/login` — Authenticate existing user & return JWT token.
-
-### Dashboard (`/api/v1/dashboard`)
-- `GET /api/v1/dashboard/balance` — Fetch total income, total expense, balance, and savings rate.
-- `GET /api/v1/dashboard/summary` — Fetch monthly financial summary breakdown.
-
-### Categories (`/api/v1/categories`)
-- `GET /api/v1/categories` — List all expense and income categories with icons and color tokens.
-
-### Expenses (`/api/v1/expenses`)
-- `GET /api/v1/expenses` — Paginated list of user expenses.
-- `POST /api/v1/expenses` — Create a new expense transaction.
-- `DELETE /api/v1/expenses/{id}` — Delete an expense transaction.
-
-### Incomes (`/api/v1/incomes`)
-- `GET /api/v1/incomes` — Paginated list of user income entries.
-- `POST /api/v1/incomes` — Create a new income deposit.
-- `DELETE /api/v1/incomes/{id}` — Delete an income deposit.
-
-### Budgets (`/api/v1/budgets`)
-- `GET /api/v1/budgets` — List all active category budgets with spending calculations.
-- `POST /api/v1/budgets` — Create a new category spending limit.
-- `DELETE /api/v1/budgets/{id}` — Delete a category budget.
-
-### Telegram (`/api/v1/telegram`)
-- `POST /api/v1/telegram/link-code` — Generate 1-time 8-character OTP code for Telegram linking.
-- `POST /api/v1/telegram/link-chat` — Internal endpoint to bind chatId with link code.
+   Frontend App runs at **`http://localhost:5173`**.
 
 ---
 
