@@ -16,6 +16,9 @@ frontend/dist/
 .settings/
 .vscode/
 .DS_Store
+docs/architecture.md
+docs/images/architecture.svg
+docs/ci-cd.md
 
 # Environment & Secrets
 .env
